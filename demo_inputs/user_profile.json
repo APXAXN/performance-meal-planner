@@ -1,0 +1,22 @@
+{
+  "user_id": "u_001",
+  "name": "Alex Runner",
+  "age": 32,
+  "sex": "male",
+  "height_cm": 178,
+  "weight_kg": 74,
+  "goal": "maintain",
+  "dietary_preferences": [
+    "high-protein",
+    "mediterranean"
+  ],
+  "avoid_list": [
+    "peanuts",
+    "lamb"
+  ],
+  "allergies": [
+    "peanuts"
+  ],
+  "cooking_time_max_min": 30,
+  "budget_level": "medium"
+}

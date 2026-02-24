@@ -1,0 +1,42 @@
+{
+  "week_start": "2026-02-23",
+  "timezone": "America/Los_Angeles",
+  "training_focus": "Base endurance + strength",
+  "schedule": [
+    {
+      "date": "2026-02-23",
+      "day_type": "training",
+      "notes": "AM run 45 min"
+    },
+    {
+      "date": "2026-02-24",
+      "day_type": "training",
+      "notes": "PM strength 45 min"
+    },
+    {
+      "date": "2026-02-25",
+      "day_type": "rest",
+      "notes": "Mobility only"
+    },
+    {
+      "date": "2026-02-26",
+      "day_type": "training",
+      "notes": "Intervals"
+    },
+    {
+      "date": "2026-02-27",
+      "day_type": "training",
+      "notes": "Easy run"
+    },
+    {
+      "date": "2026-02-28",
+      "day_type": "high",
+      "notes": "Long run"
+    },
+    {
+      "date": "2026-03-01",
+      "day_type": "rest",
+      "notes": "Rest"
+    }
+  ]
+}

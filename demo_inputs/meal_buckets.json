@@ -1,0 +1,145 @@
+{
+  "high": [
+    {
+      "name": "Breakfast: Oats + banana + whey",
+      "time": "07:00",
+      "recipe_link": "https://example.com/oats-banana-whey",
+      "macros": { "kcal": 700, "protein_g": 35, "carbs_g": 110, "fat_g": 15 },
+      "ingredients": [
+        { "name": "oats", "quantity": 80, "unit": "g", "category": "pantry" },
+        { "name": "banana", "quantity": 1, "unit": "count", "category": "produce" },
+        { "name": "whey protein", "quantity": 30, "unit": "g", "category": "pantry" },
+        { "name": "milk", "quantity": 250, "unit": "ml", "category": "dairy" }
+      ]
+    },
+    {
+      "name": "Lunch: Turkey rice bowl",
+      "time": "12:30",
+      "recipe_link": "https://example.com/turkey-rice-bowl",
+      "macros": { "kcal": 800, "protein_g": 45, "carbs_g": 120, "fat_g": 18 },
+      "ingredients": [
+        { "name": "turkey breast", "quantity": 200, "unit": "g", "category": "protein" },
+        { "name": "rice", "quantity": 150, "unit": "g", "category": "pantry" },
+        { "name": "bell pepper", "quantity": 1, "unit": "count", "category": "produce" },
+        { "name": "olive oil", "quantity": 10, "unit": "ml", "category": "pantry" }
+      ]
+    },
+    {
+      "name": "Snack: Yogurt + granola",
+      "time": "16:00",
+      "recipe_link": "https://example.com/yogurt-granola",
+      "macros": { "kcal": 400, "protein_g": 20, "carbs_g": 55, "fat_g": 10 },
+      "ingredients": [
+        { "name": "greek yogurt", "quantity": 200, "unit": "g", "category": "dairy" },
+        { "name": "granola", "quantity": 50, "unit": "g", "category": "pantry" },
+        { "name": "berries", "quantity": 100, "unit": "g", "category": "produce" }
+      ]
+    },
+    {
+      "name": "Dinner: Salmon pasta + greens",
+      "time": "19:30",
+      "recipe_link": "https://example.com/salmon-pasta-greens",
+      "macros": { "kcal": 900, "protein_g": 55, "carbs_g": 120, "fat_g": 25 },
+      "ingredients": [
+        { "name": "salmon fillet", "quantity": 200, "unit": "g", "category": "protein" },
+        { "name": "pasta", "quantity": 160, "unit": "g", "category": "pantry" },
+        { "name": "mixed greens", "quantity": 120, "unit": "g", "category": "produce" },
+        { "name": "olive oil", "quantity": 10, "unit": "ml", "category": "pantry" }
+      ]
+    }
+  ],
+  "rest": [
+    {
+      "name": "Breakfast: Egg white scramble + avocado",
+      "time": "07:30",
+      "recipe_link": "https://example.com/egg-white-avocado",
+      "macros": { "kcal": 550, "protein_g": 45, "carbs_g": 30, "fat_g": 25 },
+      "ingredients": [
+        { "name": "egg whites", "quantity": 6, "unit": "count", "category": "protein" },
+        { "name": "avocado", "quantity": 1, "unit": "count", "category": "produce" },
+        { "name": "spinach", "quantity": 80, "unit": "g", "category": "produce" }
+      ]
+    },
+    {
+      "name": "Lunch: Chicken salad + quinoa",
+      "time": "12:15",
+      "recipe_link": "https://example.com/chicken-salad-quinoa",
+      "macros": { "kcal": 700, "protein_g": 55, "carbs_g": 45, "fat_g": 25 },
+      "ingredients": [
+        { "name": "chicken breast", "quantity": 200, "unit": "g", "category": "protein" },
+        { "name": "quinoa", "quantity": 80, "unit": "g", "category": "pantry" },
+        { "name": "mixed greens", "quantity": 120, "unit": "g", "category": "produce" },
+        { "name": "olive oil", "quantity": 10, "unit": "ml", "category": "pantry" }
+      ]
+    },
+    {
+      "name": "Snack: Cottage cheese + berries",
+      "time": "15:30",
+      "recipe_link": "https://example.com/cottage-cheese-berries",
+      "macros": { "kcal": 200, "protein_g": 20, "carbs_g": 15, "fat_g": 5 },
+      "ingredients": [
+        { "name": "cottage cheese", "quantity": 150, "unit": "g", "category": "dairy" },
+        { "name": "berries", "quantity": 80, "unit": "g", "category": "produce" }
+      ]
+    },
+    {
+      "name": "Dinner (early): Miso soup + tofu + rice",
+      "time": "17:45",
+      "recipe_link": "https://example.com/miso-tofu-rice",
+      "macros": { "kcal": 750, "protein_g": 45, "carbs_g": 70, "fat_g": 20 },
+      "ingredients": [
+        { "name": "tofu", "quantity": 200, "unit": "g", "category": "protein" },
+        { "name": "rice", "quantity": 100, "unit": "g", "category": "pantry" },
+        { "name": "miso paste", "quantity": 15, "unit": "g", "category": "pantry" },
+        { "name": "green onion", "quantity": 20, "unit": "g", "category": "produce" }
+      ]
+    }
+  ],
+  "training": [
+    {
+      "name": "Breakfast: Greek yogurt + berries",
+      "time": "07:30",
+      "recipe_link": "https://example.com/greek-yogurt-berries",
+      "macros": { "kcal": 600, "protein_g": 40, "carbs_g": 60, "fat_g": 15 },
+      "ingredients": [
+        { "name": "greek yogurt", "quantity": 200, "unit": "g", "category": "dairy" },
+        { "name": "berries", "quantity": 120, "unit": "g", "category": "produce" },
+        { "name": "honey", "quantity": 10, "unit": "g", "category": "pantry" }
+      ]
+    },
+    {
+      "name": "Lunch: Chicken quinoa bowl",
+      "time": "12:30",
+      "recipe_link": "https://example.com/chicken-quinoa-bowl",
+      "macros": { "kcal": 800, "protein_g": 50, "carbs_g": 90, "fat_g": 20 },
+      "ingredients": [
+        { "name": "chicken breast", "quantity": 200, "unit": "g", "category": "protein" },
+        { "name": "quinoa", "quantity": 120, "unit": "g", "category": "pantry" },
+        { "name": "bell pepper", "quantity": 1, "unit": "count", "category": "produce" },
+        { "name": "olive oil", "quantity": 10, "unit": "ml", "category": "pantry" }
+      ]
+    },
+    {
+      "name": "Dinner: Salmon + rice + greens",
+      "time": "19:00",
+      "recipe_link": "https://example.com/salmon-rice-greens",
+      "macros": { "kcal": 900, "protein_g": 60, "carbs_g": 90, "fat_g": 25 },
+      "ingredients": [
+        { "name": "salmon fillet", "quantity": 200, "unit": "g", "category": "protein" },
+        { "name": "rice", "quantity": 120, "unit": "g", "category": "pantry" },
+        { "name": "mixed greens", "quantity": 120, "unit": "g", "category": "produce" },
+        { "name": "olive oil", "quantity": 10, "unit": "ml", "category": "pantry" }
+      ]
+    },
+    {
+      "name": "Snack: Apple + almond butter",
+      "time": "16:00",
+      "recipe_link": "https://example.com/apple-almond-butter",
+      "macros": { "kcal": 200, "protein_g": 8, "carbs_g": 20, "fat_g": 12 },
+      "ingredients": [
+        { "name": "apple", "quantity": 1, "unit": "count", "category": "produce" },
+        { "name": "almond butter", "quantity": 20, "unit": "g", "category": "pantry" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "week_start": "2026-02-23",
+  "garmin_summary": {
+    "avg_sleep_hr": 7.1,
+    "avg_steps": 9800,
+    "training_load": "moderate"
+  },
+  "mfp_summary": {
+    "avg_kcal": 2400,
+    "protein_g": 150,
+    "carbs_g": 280,
+    "fat_g": 70
+  }
+}

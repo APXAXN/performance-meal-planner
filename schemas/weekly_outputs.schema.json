@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WeeklyOutputs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "week_start",
+    "per_day_targets",
+    "meal_plan",
+    "grocery_list",
+    "nutrition_brief",
+    "email_digest"
+  ],
+  "properties": {
+    "week_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "per_day_targets": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "day_type",
+          "calories_target",
+          "protein_g",
+          "carbs_g",
+          "fat_g",
+          "notes"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "day_type": {
+            "type": "string",
+            "enum": [
+              "rest",
+              "training",
+              "high"
+            ]
+          },
+          "calories_target": {
+            "type": "number"
+          },
+          "protein_g": {
+            "type": "number"
+          },
+          "carbs_g": {
+            "type": "number"
+          },
+          "fat_g": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Exactly 7 daily target entries (one per day). TODO: relax minItems/maxItems for partial-week support."
+    },
+    "meal_plan": {
+      "$ref": "meal_plan.schema.json"
+    },
+    "grocery_list": {
+      "$ref": "grocery_list.schema.json"
+    },
+    "nutrition_brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "targets"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "targets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kcal",
+            "protein_g",
+            "carbs_g",
+            "fat_g"
+          ],
+          "properties": {
+            "kcal": {
+              "type": "number"
+            },
+            "protein_g": {
+              "type": "number"
+            },
+            "carbs_g": {
+              "type": "number"
+            },
+            "fat_g": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "email_digest": {
+      "type": "string"
+    }
+  }
+}
