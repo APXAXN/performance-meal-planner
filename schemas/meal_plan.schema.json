@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MealPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "week_start",
+    "days"
+  ],
+  "properties": {
+    "week_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "day_type",
+          "meals"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "day_type": {
+            "type": "string",
+            "enum": [
+              "rest",
+              "training",
+              "high"
+            ]
+          },
+          "meals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "time",
+                "recipe_link",
+                "ingredients",
+                "macros"
+              ],
+              "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "time": {
+                    "type": "string"
+                  },
+                  "recipe_link": {
+                    "type": "string"
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "name",
+                        "quantity",
+                        "unit"
+                      ],
+                      "properties": {
+                        "name": { "type": "string" },
+                        "quantity": { "type": "number" },
+                        "unit": { "type": "string" },
+                        "category": { "type": "string" }
+                      }
+                    }
+                  },
+                  "macros": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kcal",
+                    "protein_g",
+                    "carbs_g",
+                    "fat_g"
+                  ],
+                  "properties": {
+                    "kcal": {
+                      "type": "number"
+                    },
+                    "protein_g": {
+                      "type": "number"
+                    },
+                    "carbs_g": {
+                      "type": "number"
+                    },
+                    "fat_g": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
