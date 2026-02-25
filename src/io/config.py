@@ -36,7 +36,7 @@ def _load_env() -> None:
     root = Path(__file__).resolve().parents[2]
     env_path = root / ".env"
     if env_path.exists():
-        load_dotenv(env_path, override=False)
+        load_dotenv(env_path, override=True)
 
 
 _load_env()
