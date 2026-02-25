@@ -31,6 +31,7 @@ from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT))  # needed for src.io.* imports
 
 from core.day_type import detect_day_type  # noqa: E402
 from core.targets import targets_for_day, week_intensity_tier  # noqa: E402
@@ -43,6 +44,31 @@ from integrations import (  # noqa: E402
     garmin_wellness_import,
     drinkcontrol_import,
 )
+
+# Load .env so API keys are available throughout the pipeline
+try:
+    from dotenv import load_dotenv as _load_dotenv
+    _env_path = ROOT / ".env"
+    if _env_path.exists():
+        _load_dotenv(_env_path, override=True)
+except ImportError:
+    pass
+
+try:
+    import importlib as _importlib
+    _recipe_mod = _importlib.import_module("src.io.recipe_curator")
+    curate_recipes = _recipe_mod.curate_recipes
+    _CLAUDE_RECIPES_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    _CLAUDE_RECIPES_AVAILABLE = False
+
+try:
+    _gmail_mod = _importlib.import_module("src.io.gmail_sender")
+    send_digest = _gmail_mod.send_digest
+    gmail_is_configured = _gmail_mod.is_configured
+    _GMAIL_SENDER_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    _GMAIL_SENDER_AVAILABLE = False
 
 
 # ---------------------------------------------------------------------------
@@ -1252,7 +1278,8 @@ def main():
     )
     parser.add_argument("--demo", action="store_true", help="Run with demo inputs")
     parser.add_argument("--variant", choices=["base", "alt"], default="base")
-    parser.add_argument("--gmail-draft", action="store_true")
+    parser.add_argument("--gmail-draft", action="store_true", help="Write draft_request.json (stub)")
+    parser.add_argument("--send", action="store_true", help="Send digest via Gmail SMTP (requires GMAIL_* in .env)")
     parser.add_argument("--to", dest="to_email")
     parser.add_argument("--ingest", action="store_true")
     parser.add_argument("--week-start", dest="week_start")
@@ -1354,7 +1381,14 @@ def main():
 
     # Stage 2
     print("\n[Stage 2] Attaching recipes (Recipe Curator)...")
-    recipes = stage2_recipes(plan_intent, meal_buckets)
+    if _CLAUDE_RECIPES_AVAILABLE and os.environ.get("ANTHROPIC_API_KEY", "").strip():
+        print("  Using live Claude recipe curator...")
+        recipes = curate_recipes(plan_intent, user)
+        if not recipes:
+            print("  Claude returned empty — falling back to meal_buckets.")
+            recipes = stage2_recipes(plan_intent, meal_buckets)
+    else:
+        recipes = stage2_recipes(plan_intent, meal_buckets)
     recipes_md = recipes_to_markdown(recipes)
     (out_dir / "recipes.md").write_text(recipes_md)
     batch_cook_count = sum(1 for r in recipes if r["batch_cook"])
@@ -1475,7 +1509,7 @@ def main():
         except kroger_cart.KrogerAPIError as e:
             print(f"  [kroger-search] API error: {e}")
 
-    # --gmail-draft
+    # --gmail-draft (stub — writes draft_request.json)
     if args.gmail_draft:
         digest_text = (out_dir / "Weekly_Email_Digest.md").read_text()
         subject = "Weekly Nutrition Digest"
@@ -1483,9 +1517,36 @@ def main():
             if line.startswith("# "):
                 subject = line[2:].strip()
                 break
-        to_email = args.to_email or os.getenv("DELIVERY_EMAIL") or "pr@apxaxn.com"
+        to_email = args.to_email or os.getenv("DELIVERY_EMAIL") or ""
         create_draft(subject=subject, body=digest_text, to=to_email, output_dir=out_dir)
-        print(f"\nGmail draft created (stub). Recipient: {to_email}")
+        print(f"\nGmail draft payload written → {out_dir / 'draft_request.json'}")
+
+    # --send (real Gmail SMTP send via App Password)
+    if args.send:
+        digest_text = (out_dir / "Weekly_Email_Digest.md").read_text()
+        subject = "Weekly Nutrition Digest"
+        for line in digest_text.splitlines():
+            if line.startswith("# "):
+                subject = line[2:].strip()
+                break
+        to_email = args.to_email or os.getenv("GMAIL_RECIPIENT") or os.getenv("DELIVERY_EMAIL") or ""
+        if _GMAIL_SENDER_AVAILABLE:
+            if gmail_is_configured():
+                print(f"\nSending digest via Gmail → {to_email or '(sender address)'}...")
+                ok = send_digest(subject=subject, body_md=digest_text, to=to_email or None)
+                if ok:
+                    print("  ✓ Email sent successfully.")
+                else:
+                    print("  ✗ Send failed — check GMAIL_SENDER / GMAIL_APP_PASSWORD in .env")
+            else:
+                print(
+                    "\n[--send] Gmail not configured. Add to .env:\n"
+                    "  GMAIL_SENDER=you@gmail.com\n"
+                    "  GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx\n"
+                    "  Get App Password: myaccount.google.com/apppasswords"
+                )
+        else:
+            print("\n[--send] gmail_sender module not available.")
 
     # Summary
     weeks_display = _count_feature_table_rows(ROOT / "data" / "Feature_Table.csv")
