@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PlanModifications",
+  "description": "V2 artifact from Performance Data Analyst. In V1, data_confidence is always 'insufficient' and modifications array is always empty. revision_pass_authorized is always false in V1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generated_at", "data_confidence", "revision_pass_authorized", "modifications"],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "description": "ISO-8601 timestamp"
+    },
+    "data_confidence": {
+      "type": "string",
+      "enum": ["strong", "emerging", "insufficient"],
+      "description": "V1: always 'insufficient' until Feature_Table.csv accumulates ≥4 weeks of data"
+    },
+    "revision_pass_authorized": {
+      "type": "boolean",
+      "description": "V1: always false. True only when data_confidence != 'insufficient' (V2)"
+    },
+    "modifications": {
+      "type": "array",
+      "maxItems": 3,
+      "description": "V1: always empty. V2: up to 3 bounded modifications.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["modification_id", "meal_id", "type", "current_value", "proposed_value", "rationale", "confidence", "tradeoff"],
+        "properties": {
+          "modification_id": {
+            "type": "string",
+            "pattern": "^MOD_[0-9]{3}$"
+          },
+          "meal_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["meal_swap", "macro_adjust", "timing_shift", "ingredient_add", "ingredient_remove"]
+          },
+          "current_value": { "type": "string" },
+          "proposed_value": { "type": "string" },
+          "rationale": {
+            "type": "string",
+            "description": "One sentence tied to a signal in Insights_Report"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["strong", "possible", "weak"]
+          },
+          "tradeoff": {
+            "type": "string",
+            "description": "One sentence on what this change may cost"
+          }
+        }
+      }
+    },
+    "max_modifications_applied": {
+      "type": "integer",
+      "maximum": 3,
+      "default": 3
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "variable": { "type": "string" },
+        "measurement": { "type": "string" },
+        "duration_weeks": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "v1_note": {
+      "type": "string",
+      "description": "Populated in V1 to explain why modifications are empty. E.g. 'Insufficient historical data: Feature_Table.csv has N weeks (minimum 4 required).'"
+    }
+  }
+}

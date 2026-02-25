@@ -1,22 +1,31 @@
 # {{subject_line}}
 
-**This Week At A Glance**
+## TL;DR
 {{at_a_glance}}
 
-**Targets**
+## This Week's Targets
 {{targets_table}}
 
-**Meal Plan**
-- See `Weekly_Meal_Plan.md`
-{{meal_examples}}
+## Plan Rationale
+{{plan_rationale}}
 
-**Grocery List**
-- See `Grocery_List.md`
+## Data Analyst Notes (Experimental)
+{{data_analyst_notes}}
+
+## Meal Plan
+{{meal_plan_section}}
+
+## Grocery List
 {{grocery_top_items}}
 
-**Notes + Feedback**
+*(Full list in `grocery_list.csv` and `Grocery_List.md`)*
+
+## Notes / Assumptions
+{{notes_assumptions}}
+
+## Next Week Feedback Prompts
 {{feedback_questions}}
 
-**QA Summary**
+## QA Summary
 {{qa_summary}}
 {{qa_confidence}}

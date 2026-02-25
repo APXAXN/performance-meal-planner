@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PlanIntent",
+  "description": "Intermediate artifact from Nutrition Planner role. Defines macro targets, day types, meal structure, and Meal IDs for the week.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["week_start", "macro_plan", "day_types", "meal_structure", "rationale", "meal_ids"],
+  "properties": {
+    "week_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "macro_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["daily_avg_kcal", "protein_g", "carbs_g_training", "carbs_g_rest", "fat_g"],
+      "properties": {
+        "daily_avg_kcal": { "type": "number" },
+        "protein_g": { "type": "number" },
+        "carbs_g_training": { "type": "number", "description": "Carbs target for training/high days" },
+        "carbs_g_rest": { "type": "number", "description": "Carbs target for rest days" },
+        "fat_g": { "type": "number" }
+      }
+    },
+    "day_types": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["training_days", "rest_days"],
+      "properties": {
+        "training_days": {
+          "type": "array",
+          "items": { "type": "string", "format": "date" }
+        },
+        "rest_days": {
+          "type": "array",
+          "items": { "type": "string", "format": "date" }
+        },
+        "high_days": {
+          "type": "array",
+          "items": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "meal_structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["training_day", "rest_day"],
+      "properties": {
+        "training_day": {
+          "type": "object",
+          "properties": {
+            "breakfast": { "type": "string" },
+            "lunch": { "type": "string" },
+            "dinner": { "type": "string" },
+            "snack": { "type": "string" }
+          }
+        },
+        "rest_day": {
+          "type": "object",
+          "properties": {
+            "breakfast": { "type": "string" },
+            "lunch": { "type": "string" },
+            "dinner": { "type": "string" },
+            "snack": { "type": "string" }
+          }
+        },
+        "high_day": {
+          "type": "object",
+          "properties": {
+            "breakfast": { "type": "string" },
+            "lunch": { "type": "string" },
+            "dinner": { "type": "string" },
+            "snack": { "type": "string" }
+          }
+        }
+      }
+    },
+    "rationale": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 8,
+      "items": { "type": "string" },
+      "description": "4-8 bullet points explaining plan logic"
+    },
+    "meal_ids": {
+      "type": "array",
+      "description": "All 28 meal IDs for the week (D1_Breakfast through D7_Snack)",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["meal_id", "date", "slot", "day_type"],
+        "properties": {
+          "meal_id": { "type": "string", "pattern": "^D[1-7]_(Breakfast|Lunch|Dinner|Snack)$" },
+          "date": { "type": "string", "format": "date" },
+          "slot": { "type": "string", "enum": ["Breakfast", "Lunch", "Dinner", "Snack"] },
+          "day_type": { "type": "string", "enum": ["rest", "training", "high"] }
+        }
+      }
+    },
+    "defaults_applied": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of defaults applied due to missing inputs (logged in run_log)"
+    }
+  }
+}
