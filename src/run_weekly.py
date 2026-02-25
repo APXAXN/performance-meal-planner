@@ -17,7 +17,7 @@ from core.day_type import detect_day_type  # noqa: E402
 from core.targets import targets_for_day  # noqa: E402
 from core.normalize_grocery import rollup  # noqa: E402
 from integrations.gmail_draft import create_draft  # noqa: E402
-from integrations import garmin_import, user_intake_import, kroger_cart  # noqa: E402
+from integrations import garmin_import, user_intake_import, kroger_cart, garmin_wellness_import  # noqa: E402
 
 
 def load_json(path: Path):
@@ -535,6 +535,16 @@ def main():
         "--kroger-search", action="store_true",
         help="Run Kroger product search on grocery list and write kroger_cart_request.json"
     )
+    parser.add_argument(
+        "--garmin-wellness", dest="garmin_wellness_dir", metavar="PATH",
+        help="Path to Garmin Connect full export directory. "
+             "Parses sleep, RHR, steps, and training load → updates demo_inputs/outcome_signals.json "
+             "before running the pipeline. Example: --garmin-wellness Garmin02242026"
+    )
+    parser.add_argument(
+        "--wellness-days", dest="wellness_days", type=int, default=14, metavar="N",
+        help="Rolling average window in days for Garmin wellness signals (default: 14)."
+    )
     args = parser.parse_args()
 
     if not args.demo:
@@ -573,6 +583,22 @@ def main():
 
         print("[--ingest] Done. Parsed files written to demo_inputs/parsed/")
         print("  Review demo_inputs/parsed/weekly_context.json before running the pipeline.\n")
+
+    # --garmin-wellness: parse full Garmin export → update outcome_signals.json ----
+    if args.garmin_wellness_dir:
+        import datetime as _dt
+        garmin_dir = Path(args.garmin_wellness_dir)
+        if not garmin_dir.is_absolute():
+            garmin_dir = (ROOT / garmin_dir).resolve()
+        if not garmin_dir.exists():
+            raise SystemExit(f"[--garmin-wellness] Directory not found: {garmin_dir}")
+        print(f"\n[--garmin-wellness] Parsing Garmin wellness export...")
+        garmin_wellness_import.run(
+            garmin_dir=garmin_dir,
+            output_path=demo_dir / "outcome_signals.json",
+            days=args.wellness_days,
+        )
+        print()
 
     schema_registry = build_registry()
 

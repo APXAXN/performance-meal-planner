@@ -1,2 +1,2 @@
 user_id,name,age,sex,height_cm,weight_kg,goal,dietary_preferences,allergies,avoid_list,cooking_time_max_min,budget_level,body_fat_pct,pal_value,ftp_w
-u_001,Alex Runner,32,male,178,74,maintain,"high-protein,mediterranean",peanuts,"peanuts,lamb",30,medium,,1.35,
+u_nathan,Nathan,45,male,172.72,66.9,maintain,"high-protein,mediterranean",,,30,medium,,1.35,211.0

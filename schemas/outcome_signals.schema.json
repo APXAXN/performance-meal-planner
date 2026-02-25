@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OutcomeSignals",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "week_start",
+    "garmin_summary",
+    "mfp_summary"
+  ],
+  "properties": {
+    "week_start": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date (YYYY-MM-DD) of the Monday that starts this tracking week."
+    },
+    "generated_at": {
+      "type": "string",
+      "description": "ISO 8601 UTC timestamp when this file was last written by garmin_wellness_import."
+    },
+    "garmin_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "avg_sleep_hr",
+        "avg_steps",
+        "training_load"
+      ],
+      "properties": {
+        "avg_sleep_hr": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Average nightly sleep hours over the look-back window."
+        },
+        "avg_rhr": {
+          "type": ["integer", "null"],
+          "minimum": 20,
+          "maximum": 120,
+          "description": "Average resting heart rate (bpm) over the look-back window."
+        },
+        "avg_steps": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Average daily step count over the look-back window."
+        },
+        "training_load": {
+          "type": "string",
+          "enum": ["low", "moderate", "high", "unknown"],
+          "description": "ACWR-derived training load classification for the most recent period."
+        },
+        "acwr": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Acute:Chronic Workload Ratio from Garmin (most recent value). <0.8=low, 0.8–1.3=optimal, >1.3=high."
+        },
+        "vo2max": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "VO2max in ml/kg/min from Garmin biometric profile."
+        },
+        "ftp_w": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Functional Threshold Power in watts from Garmin power zones / biometric profile."
+        }
+      }
+    },
+    "mfp_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "avg_kcal",
+        "protein_g",
+        "carbs_g",
+        "fat_g"
+      ],
+      "properties": {
+        "avg_kcal": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Average daily calories from MyFitnessPal (manual input; null if not logged)."
+        },
+        "protein_g": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Average daily protein grams from MFP (null if not logged)."
+        },
+        "carbs_g": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Average daily carbohydrate grams from MFP (null if not logged)."
+        },
+        "fat_g": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Average daily fat grams from MFP (null if not logged)."
+        }
+      }
+    }
+  }
+}

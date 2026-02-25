@@ -1,9 +1,14 @@
 {
   "week_start": "2026-02-23",
+  "generated_at": "2026-02-25T02:17:40Z",
   "garmin_summary": {
-    "avg_sleep_hr": 7.1,
-    "avg_steps": 9800,
-    "training_load": "moderate"
+    "avg_sleep_hr": 8.2,
+    "avg_rhr": 57,
+    "avg_steps": 4138,
+    "training_load": "high",
+    "acwr": 1.7,
+    "vo2max": 54,
+    "ftp_w": 211
   },
   "mfp_summary": {
     "avg_kcal": 2400,

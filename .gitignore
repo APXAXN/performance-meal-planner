@@ -7,3 +7,8 @@ outputs/demo/
 outputs/demo_alt/
 demo_inputs/parsed/
 demo_inputs/raw/garmin_activities.csv
+
+# Garmin Connect full export — contains personal health data, never commit
+Garmin*/
+*.lha
+*_LhaBackup_*.zip

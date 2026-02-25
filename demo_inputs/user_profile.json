@@ -1,25 +1,20 @@
 {
-  "user_id": "u_001",
-  "name": "Alex Runner",
-  "age": 32,
+  "user_id": "u_nathan",
+  "name": "Nathan",
+  "age": 45,
   "sex": "male",
-  "height_cm": 178,
-  "weight_kg": 74,
+  "height_cm": 172.72,
+  "weight_kg": 66.9,
   "goal": "maintain",
   "dietary_preferences": [
     "high-protein",
     "mediterranean"
   ],
-  "avoid_list": [
-    "peanuts",
-    "lamb"
-  ],
-  "allergies": [
-    "peanuts"
-  ],
+  "avoid_list": [],
+  "allergies": [],
   "cooking_time_max_min": 30,
   "budget_level": "medium",
   "pal_value": 1.35,
   "body_fat_pct": null,
-  "ftp_w": null
+  "ftp_w": 211.0
 }
