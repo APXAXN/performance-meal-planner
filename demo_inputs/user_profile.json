@@ -18,5 +18,8 @@
     "peanuts"
   ],
   "cooking_time_max_min": 30,
-  "budget_level": "medium"
+  "budget_level": "medium",
+  "pal_value": 1.35,
+  "body_fat_pct": null,
+  "ftp_w": null
 }

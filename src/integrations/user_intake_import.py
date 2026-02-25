@@ -9,9 +9,13 @@ CSV columns (all required unless noted):
     allergies (comma-separated in quotes),
     avoid_list (comma-separated in quotes, optional),
     cooking_time_max_min (integer, optional),
-    budget_level (low|medium|high, optional)
+    budget_level (low|medium|high, optional),
+    body_fat_pct (float, optional — enables Cunningham RMR),
+    pal_value (float 1.0–3.0, optional — non-training activity level),
+    ftp_w (float, optional — Functional Threshold Power in watts)
 
 Assumptions documented in docs/02_Data_Contracts.md.
+Cycling fields documented in docs/nutrition_source_of_truth_training.md §2.
 """
 
 import csv
@@ -59,6 +63,19 @@ def parse_user_intake(csv_path: Path) -> dict:
     budget = row.get("budget_level", "").strip().lower()
     if budget:
         profile["budget_level"] = budget
+
+    # Optional cycling performance fields (docs/nutrition_source_of_truth_training.md §2)
+    body_fat = row.get("body_fat_pct", "").strip()
+    if body_fat:
+        profile["body_fat_pct"] = float(body_fat)
+
+    pal = row.get("pal_value", "").strip()
+    if pal:
+        profile["pal_value"] = float(pal)
+
+    ftp = row.get("ftp_w", "").strip()
+    if ftp:
+        profile["ftp_w"] = float(ftp)
 
     return profile
 

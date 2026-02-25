@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "user_id",
+    "name",
+    "age",
+    "sex",
+    "height_cm",
+    "weight_kg",
+    "goal",
+    "dietary_preferences"
+  ],
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sex": {
+      "type": "string",
+      "enum": [
+        "female",
+        "male",
+        "nonbinary",
+        "unspecified"
+      ]
+    },
+    "height_cm": {
+      "type": "number",
+      "minimum": 0
+    },
+    "weight_kg": {
+      "type": "number",
+      "minimum": 0
+    },
+    "goal": {
+      "type": "string",
+      "enum": [
+        "maintain",
+        "gain",
+        "cut"
+      ]
+    },
+    "dietary_preferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "avoid_list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allergies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cooking_time_max_min": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "budget_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "body_fat_pct": {
+      "type": ["number", "null"],
+      "minimum": 3,
+      "maximum": 60,
+      "description": "Body fat percentage (optional). Enables Cunningham RMR equation (more accurate than Harris-Benedict for athletes). E.g. 12.0 for 12%."
+    },
+    "pal_value": {
+      "type": ["number", "null"],
+      "minimum": 1.0,
+      "maximum": 3.0,
+      "description": "Physical Activity Level multiplier for non-training daily energy expenditure (Cunningham scale). Typical values: 1.2 (desk, minimal movement), 1.35 (desk + light walking), 1.55 (active/standing work). See nutrition_source_of_truth_training.md §2.2."
+    },
+    "ftp_w": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Functional Threshold Power in watts. Used for future training-energy estimation via power meter kJ→kcal (1 kJ ≈ 1 kcal). Not used in V1 macro calculation."
+    }
+  }
+}
