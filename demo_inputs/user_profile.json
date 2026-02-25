@@ -1,20 +1,26 @@
 {
-  "user_id": "u_nathan",
-  "name": "Nathan",
+  "user_id": "user_001",
+  "name": "Nathan F",
   "age": 45,
   "sex": "male",
-  "height_cm": 172.72,
-  "weight_kg": 66.9,
+  "height_cm": 172.7,
+  "weight_kg": 67.6,
   "goal": "maintain",
   "dietary_preferences": [
+    "omnivore",
+    "mediterranean",
     "high-protein",
-    "mediterranean"
+    "whole-foods"
   ],
-  "avoid_list": [],
+  "avoid_list": [
+    "whole tomato",
+    "spicy food",
+    "bell peppers",
+    "raw white onion"
+  ],
   "allergies": [],
-  "cooking_time_max_min": 30,
-  "budget_level": "medium",
-  "pal_value": 1.35,
-  "body_fat_pct": null,
-  "ftp_w": 211.0
+  "cooking_time_max_min": 90,
+  "budget_level": "high",
+  "body_fat_pct": 11.0,
+  "ftp_w": 220
 }
