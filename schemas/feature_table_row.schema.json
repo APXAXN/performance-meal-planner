@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FeatureTableRow",
+  "description": "One row in Feature_Table.csv — appended each week by the Data Analyst. V2 activation requires ≥4 rows.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["week_start", "week_tier", "avg_kcal", "avg_protein_g", "avg_carbs_g", "avg_fat_g", "training_days", "rest_days", "high_days"],
+  "properties": {
+    "week_start": { "type": "string", "format": "date" },
+    "week_tier": { "type": "string", "enum": ["peak", "build", "base", "recovery"] },
+    "avg_kcal": { "type": "number" },
+    "avg_protein_g": { "type": "number" },
+    "avg_carbs_g": { "type": "number" },
+    "avg_fat_g": { "type": "number" },
+    "training_days": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "rest_days": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "high_days": { "type": "integer", "minimum": 0, "maximum": 7 },
+    "avg_sleep_hr": { "type": ["number", "null"] },
+    "avg_rhr": { "type": ["integer", "null"] },
+    "acwr": { "type": ["number", "null"] },
+    "training_load": { "type": ["string", "null"] },
+    "alcohol_units_7d": { "type": ["number", "null"] },
+    "alcohol_flag": { "type": ["string", "null"] },
+    "mfp_avg_kcal": { "type": ["number", "null"] },
+    "mfp_protein_g": { "type": ["number", "null"] },
+    "notes": { "type": "string", "default": "" }
+  }
+}
