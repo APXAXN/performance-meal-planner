@@ -1,0 +1,62 @@
+{
+  "week_start": "2025-03-03",
+  "timezone": "America/Los_Angeles",
+  "training_focus": "Running (3 sessions, auto-generated)",
+  "schedule": [
+    {
+      "date": "2025-03-03",
+      "day_type": "high",
+      "notes": "running"
+    },
+    {
+      "date": "2025-03-04",
+      "day_type": "training",
+      "notes": "strength training"
+    },
+    {
+      "date": "2025-03-05",
+      "day_type": "high",
+      "notes": "running"
+    },
+    {
+      "date": "2025-03-06",
+      "day_type": "high",
+      "notes": "cycling"
+    },
+    {
+      "date": "2025-03-07",
+      "day_type": "rest",
+      "notes": "No activity"
+    },
+    {
+      "date": "2025-03-08",
+      "day_type": "high",
+      "notes": "running"
+    },
+    {
+      "date": "2025-03-09",
+      "day_type": "training",
+      "notes": "strength training"
+    }
+  ],
+  "_ingestion_meta": {
+    "garmin_source": "csv",
+    "strava_activities": 0,
+    "nutritionix_days": 7,
+    "garmin_summary": {
+      "avg_sleep_hr": 7.2,
+      "avg_rhr": 48.6,
+      "avg_steps": 9373,
+      "training_load": "very_high",
+      "acwr": null,
+      "vo2max": null,
+      "ftp_w": null
+    },
+    "mfp_summary": {
+      "avg_kcal": 2131,
+      "protein_g": 0.0,
+      "carbs_g": 237.9,
+      "fat_g": 62.6
+    }
+  }
+}
