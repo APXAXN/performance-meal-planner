@@ -6,6 +6,20 @@
 
 ---
 
+## Pre-Run Checklist
+
+Before running the agent pipeline each week:
+
+1. Drop Nutritionix CSV export into `inputs/exports/` (export from app: Profile → Logs → Export)
+2. Drop Garmin CSV export into `inputs/exports/` (connect.garmin.com → Activities → Export)
+   OR: ensure `GARMIN_EMAIL` + `GARMIN_PASSWORD` are set in `.env` for automated fetch via garth
+3. Optional: confirm `STRAVA_REFRESH_TOKEN` is valid (auto-refreshes if set)
+4. Run: `python scripts/ingest.py --week YYYY-MM-DD --exports inputs/exports/`
+5. Confirm ingestion summary shows all sources ✓ or note which are absent
+6. Run: `python src/run_weekly.py --demo`
+
+---
+
 ## Prerequisites
 
 - Python 3.11+
@@ -15,8 +29,14 @@
 pip install -r requirements.txt
 ```
 
-Dependencies: `jsonschema>=4.18`, `referencing>=0.28`
-No other packages required — all integrations use Python stdlib only.
+Dependencies: `jsonschema>=4.18`, `referencing>=0.28`, `requests`, `python-dotenv`, `garth` (optional — Garmin automation), `pytest`
+
+Copy `.env.example` to `.env` and fill in your credentials before running:
+
+```bash
+cp .env.example .env
+# Edit .env and add ANTHROPIC_API_KEY at minimum
+```
 
 ---
 

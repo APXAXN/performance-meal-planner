@@ -1,2 +1,6 @@
 jsonschema>=4.18
 referencing>=0.28
+requests
+python-dotenv
+garth       # optional: Garmin automation
+pytest
