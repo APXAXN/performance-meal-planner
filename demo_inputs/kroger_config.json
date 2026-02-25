@@ -1,0 +1,9 @@
+{
+  "_comment": "Kroger Developer API credentials. Register at https://developer.kroger.com. Keep this file out of git (it is in .gitignore).",
+  "client_id": "YOUR_CLIENT_ID_HERE",
+  "client_secret": "YOUR_CLIENT_SECRET_HERE",
+  "location_id": "70100159",
+  "_location_note": "70100159 is a sample Fred Meyer location ID. Find yours: GET /v1/locations?filter.chain=Fred%20Meyer&filter.zipCode=YOUR_ZIP",
+  "redirect_uri": "http://localhost:8080/callback",
+  "store_chain": "Fred Meyer"
+}

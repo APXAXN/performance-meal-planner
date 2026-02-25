@@ -17,6 +17,7 @@ from core.day_type import detect_day_type  # noqa: E402
 from core.targets import targets_for_day  # noqa: E402
 from core.normalize_grocery import rollup  # noqa: E402
 from integrations.gmail_draft import create_draft  # noqa: E402
+from integrations import garmin_import, user_intake_import, kroger_cart  # noqa: E402
 
 
 def load_json(path: Path):
@@ -234,13 +235,30 @@ def grocery_to_markdown(grocery_list: dict) -> str:
     groups = {}
     for item in grocery_list.get("items", []):
         groups.setdefault(item.get("category", "unknown"), []).append(item)
+    has_prices = any(i.get("price_usd") for i in grocery_list.get("items", []))
     lines = [f"# Grocery List ({grocery_list.get('week_start')})", "", "**Items**"]
     for category in sorted(groups.keys()):
         lines.append(f"\n{category.title()}")
         for item in sorted(groups[category], key=lambda x: x.get("name_normalized", "")):
             qty = item.get("total_quantity")
             unit = item.get("unit")
-            lines.append(f"- {item.get('name_display')} — {qty:.0f} {unit}")
+            price = item.get("price_usd")
+            store_name = item.get("store_item_name", "")
+            match_type = item.get("match_type", "")
+            line = f"- {item.get('name_display')} — {qty:.0f} {unit}"
+            if price is not None:
+                line += f" | ${price:.2f}"
+                if match_type == "approximate":
+                    line += " (approx match)"
+            elif has_prices:
+                line += " | price unavailable"
+            if store_name and store_name.lower() != item.get("name_display", "").lower():
+                line += f"\n  ↳ {store_name}"
+            lines.append(line)
+    if has_prices:
+        priced = [i for i in grocery_list.get("items", []) if i.get("price_usd")]
+        total = sum(i["price_usd"] for i in priced)
+        lines.append(f"\n**Estimated Total (Kroger):** ${total:.2f} ({len(priced)}/{len(grocery_list.get('items',[]))} items priced)")
     lines.append("")
     return "\n".join(lines)
 
@@ -502,6 +520,18 @@ def main():
     parser.add_argument("--variant", choices=["base", "alt"], default="base", help="Demo variant")
     parser.add_argument("--gmail-draft", action="store_true", help="Create Gmail draft from digest")
     parser.add_argument("--to", dest="to_email", help="Recipient email for draft")
+    parser.add_argument(
+        "--ingest", action="store_true",
+        help="Parse raw inputs (demo_inputs/raw/) → demo_inputs/parsed/ before running pipeline"
+    )
+    parser.add_argument(
+        "--week-start", dest="week_start",
+        help="ISO date (YYYY-MM-DD) for Garmin parser week start (default: current Monday)"
+    )
+    parser.add_argument(
+        "--kroger-search", action="store_true",
+        help="Run Kroger product search on grocery list and write kroger_cart_request.json"
+    )
     args = parser.parse_args()
 
     if not args.demo:
@@ -510,6 +540,36 @@ def main():
     demo_dir = ROOT / "demo_inputs"
     out_dir = ROOT / "outputs" / ("demo_alt" if args.variant == "alt" else "demo")
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    # --ingest: parse raw inputs → demo_inputs/parsed/ -------------------------
+    if args.ingest:
+        raw_dir = demo_dir / "raw"
+        parsed_dir = demo_dir / "parsed"
+        print("\n[--ingest] Parsing raw inputs...")
+
+        # User intake
+        user_intake_csv = raw_dir / "user_intake.csv"
+        if user_intake_csv.exists():
+            user_intake_import.run(raw_dir, parsed_dir)
+        else:
+            print(f"  Skipping user intake: {user_intake_csv} not found")
+
+        # Garmin activities
+        garmin_csv = raw_dir / "garmin_activities.csv"
+        if garmin_csv.exists():
+            import datetime as _dt
+            if args.week_start:
+                ws = _dt.date.fromisoformat(args.week_start)
+            else:
+                today = _dt.date.today()
+                ws = today - _dt.timedelta(days=today.weekday())
+            garmin_import.run(raw_dir, parsed_dir, ws)
+        else:
+            print(f"  Skipping Garmin: {garmin_csv} not found")
+            print("  Export from Garmin Connect → Activities → Export to CSV")
+
+        print("[--ingest] Done. Parsed files written to demo_inputs/parsed/")
+        print("  Review demo_inputs/parsed/weekly_context.json before running the pipeline.\n")
 
     schema_registry = build_registry()
 
@@ -638,6 +698,35 @@ def main():
     (out_dir / "grocery_list.json").write_text(json.dumps(grocery_list, indent=2))
     (out_dir / "weekly_outputs.json").write_text(json.dumps(weekly_outputs, indent=2))
     (out_dir / "qa_report.md").write_text(qa_report)
+
+    # --kroger-search: resolve grocery items against Kroger API --------------------
+    if args.kroger_search:
+        config_path = demo_dir / "kroger_config.json"
+        grocery_json_path = out_dir / "grocery_list.json"
+        cart_out_path = out_dir / "kroger_cart_request.json"
+        print("\n[--kroger-search] Resolving grocery items via Kroger API...")
+        try:
+            kroger_cart.run_search(
+                grocery_list_path=grocery_json_path,
+                config_path=config_path,
+                out_path=cart_out_path,
+            )
+            # Reload enriched grocery list and re-render markdown with prices
+            enriched_data = json.loads(cart_out_path.read_text())
+            enriched_items = enriched_data.get("enriched_items", [])
+            if enriched_items:
+                grocery_list["items"] = enriched_items
+                enriched_grocery_md = grocery_to_markdown(grocery_list)
+                (out_dir / "Grocery_List.md").write_text(enriched_grocery_md)
+                print(f"  Grocery_List.md updated with Kroger prices.")
+                total = enriched_data.get("estimated_total_usd", 0)
+                priced = enriched_data.get("items_priced", 0)
+                total_items = enriched_data.get("items_total", 0)
+                print(f"  Estimated total: ${total:.2f} ({priced}/{total_items} items priced)")
+        except (FileNotFoundError, ValueError) as e:
+            print(f"  [kroger-search] Skipped: {e}")
+        except kroger_cart.KrogerAPIError as e:
+            print(f"  [kroger-search] API error: {e}")
 
     if args.gmail_draft:
         digest_path = out_dir / "Weekly_Email_Digest.md"
