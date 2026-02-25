@@ -77,32 +77,70 @@ Blocking Issues: None
 
 ---
 
-## Run 2 — Second Run (Required for HW2)
+## Run 2 — 2026-02-25 (Same week, post-fix)
 
-> **Note for submission:** Run 2 will be executed the week of 2026-03-02 (next Monday) when launchd triggers automatically, or can be triggered manually with the command below. This section documents what will change.
+**Change made between runs:** `.env` duplicate Gmail entries removed — corrected App Password (`fvpu bstj iiej ypxl`) is now the only entry. This unblocked email delivery.
 
-**To execute Run 2 now:**
-```bash
-cd /Users/nathanfitzgerald/.claude-worktrees/performance-meal-planner/goofy-chaum
-python src/run_weekly.py --demo --send
+**Run command:** `python src/run_weekly.py --demo --send`
+*(executed from project root: `~/.claude-worktrees/performance-meal-planner/goofy-chaum`)*
+
+**Run timestamps (from run_log.md):**
+- Stage 0 (Validate): 2026-02-25T22:27:45Z — PASS
+- Stage 1 (Plan Intent): 2026-02-25T22:27:45Z — PASS
+- Stage 2 (Recipes): 2026-02-25T22:29:20Z — PASS *(95 seconds — 2 Claude API calls)*
+- Stage 3 (Grocery): 2026-02-25T22:29:20Z — PASS
+- Stage 4 (Data Analyst): 2026-02-25T22:29:20Z — PASS (1 week in Feature_Table, need 4)
+- Stage 4b (Revision): 2026-02-25T22:29:20Z — SKIP (data_confidence=insufficient)
+- Stage 5 (Digest): 2026-02-25T22:29:20Z — PASS
+- Stage 6 (QA Gate): 2026-02-25T22:29:20Z — PASS
+- **Total wall time: ~95 seconds**
+- **Email delivery: ✓ sent to pr@apxaxn.com**
+
+### Key Outputs
+
+**Macro targets (Stage 1):** Identical to Run 1 — same demo input week
+- Daily avg: 3,013 kcal | Protein: 125g | Carbs training: 455g | Carbs rest: 277g
+
+**Grocery list (Stage 3):** 91 line items | Budget estimate: $228–$455 | Store: Fred Meyer
+- Reduced from 102 items in Run 1 — Claude generated slightly different recipes with fewer distinct ingredients (natural LLM variation across runs)
+
+**QA report (Stage 6):**
+```
+## Overall: PASS
+
+Coverage Check: all 9 sections — PASS
+Constraint Adherence: PASS (zero avoid-list violations)
+Macro Accuracy: PASS (within ±10%)
+Grocery Completeness: FAIL (quantity=0 for sea salt — advisory only)
+Recipe Link Quality: FAIL (14 simple_build entries — advisory only)
+Tone Check: PASS
+
+Blocking Issues: None
 ```
 
-**What changes in Run 2 (improvements from Run 1 findings):**
+### What Changed vs. Run 1
 
-| Change | Before (Run 1) | After (Run 2) |
-|---|---|---|
-| `.env` duplicate entries | Gmail App Password duplicated (wrong password in first set) | `.env` cleaned — single correct entry |
-| Grocery quantity floor | 0.25 tsp → 0 (rounds to zero) | Add `max(quantity, 0.01)` floor in grocery normalizer |
-| Feature_Table accumulation | 1 row | 2 rows (Data Analyst still V1 mode; 2 more runs needed) |
-| Email delivery | Not confirmed (App Password not yet set) | Confirmed via Gmail SMTP |
+| Dimension | Run 1 | Run 2 | Notes |
+|---|---|---|---|
+| Email delivery | ❌ Failed (wrong App Password) | ✅ Sent to pr@apxaxn.com | `.env` fix resolved this |
+| Grocery items | 102 | 91 | Claude chose slightly different recipes — fewer distinct ingredients |
+| simple_build meals | 8 | 14 | More snacks + 2 dinners used simple_build this run — LLM non-determinism |
+| Zero-quantity items | cinnamon, vanilla extract | sea salt | Same root cause; different spice this run |
+| Blocking issues | 0 | 0 | QA PASS both runs |
+| Feature_Table rows | 1 | 1 (unchanged) | Same week_start — idempotency check correctly blocked duplicate |
 
-**What to observe in Run 2:**
-1. Email arrives at pr@apxaxn.com within 95 seconds of running
-2. `data/Feature_Table.csv` now has 2 rows
-3. Digest reflects current week's training schedule (different day types)
-4. QA report should PASS with same or fewer advisory issues
+### Failures Noted (Run 2)
 
-**Run 2 output artifacts will be saved to:** `outputs/demo/` (overwrites Run 1 — consider using `--variant alt` for comparison)
+| Issue | Severity | Root Cause | Same as Run 1? |
+|---|---|---|---|
+| 14 simple_build meals (vs 8 in Run 1) | Advisory | Claude chose simple_build for more slots this run — non-deterministic; snacks + 2 dinners | Partial — same mechanism, larger this run |
+| Sea salt quantity = 0 | Advisory | Sub-gram spice quantities round to zero in float normalization | Same root cause as Run 1 |
+| Grocery `match_confidence` all = "approximate" | Advisory | Kroger API integration deferred to V1.2 | Same as Run 1 |
+| Feature_Table still 1 row | Expected | `_week_already_in_feature_table()` correctly blocked duplicate for same week_start | Expected behavior |
+
+### Key Finding: LLM Non-Determinism
+
+The two runs used **identical inputs** but Claude produced different recipes in Stage 2 (default temperature=1.0). Run 2 had 14 simple_build entries vs Run 1's 8 — meaning Claude was less confident about URLs for some dinner slots on the second run. This is expected behavior (not a bug) and demonstrates why the QA gate checking for simple_build entries as *advisory* (not blocking) is the right design — the system remains functional even when Claude falls back.
 
 ---
 
