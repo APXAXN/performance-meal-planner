@@ -65,6 +65,68 @@
         }
       }
     },
+    "alcohol_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Alcohol consumption signals from DrinkControl CSV export.",
+      "required": [
+        "units_7d",
+        "units_28d_avg_wk",
+        "kcal_7d",
+        "drink_days_7d",
+        "heaviest_day_7d",
+        "last_drink_date",
+        "days_since_drink",
+        "flag",
+        "recovery_note"
+      ],
+      "properties": {
+        "units_7d": {
+          "type": "number",
+          "minimum": 0,
+          "description": "USA standard drinks consumed in the last 7 days."
+        },
+        "units_28d_avg_wk": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Average USA units per week over the last 28 days."
+        },
+        "kcal_7d": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Alcohol-derived calories in the last 7 days."
+        },
+        "drink_days_7d": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7,
+          "description": "Number of days with any alcohol in the last 7 days."
+        },
+        "heaviest_day_7d": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Peak USA units on a single day within the last 7 days."
+        },
+        "last_drink_date": {
+          "type": ["string", "null"],
+          "description": "ISO date (YYYY-MM-DD) of the most recent drink, or null."
+        },
+        "days_since_drink": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Calendar days since the last drink (0 = today), or null if no data."
+        },
+        "flag": {
+          "type": "string",
+          "enum": ["none", "light", "moderate", "heavy"],
+          "description": "Consumption flag: none ≤2 units/7d, light ≤7, moderate ≤14, heavy >14."
+        },
+        "recovery_note": {
+          "type": "string",
+          "description": "Human-readable recovery context for the meal planner."
+        }
+      }
+    },
     "mfp_summary": {
       "type": "object",
       "additionalProperties": false,

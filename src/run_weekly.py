@@ -17,7 +17,7 @@ from core.day_type import detect_day_type  # noqa: E402
 from core.targets import targets_for_day  # noqa: E402
 from core.normalize_grocery import rollup  # noqa: E402
 from integrations.gmail_draft import create_draft  # noqa: E402
-from integrations import garmin_import, user_intake_import, kroger_cart, garmin_wellness_import  # noqa: E402
+from integrations import garmin_import, user_intake_import, kroger_cart, garmin_wellness_import, drinkcontrol_import  # noqa: E402
 
 
 def load_json(path: Path):
@@ -545,6 +545,13 @@ def main():
         "--wellness-days", dest="wellness_days", type=int, default=14, metavar="N",
         help="Rolling average window in days for Garmin wellness signals (default: 14)."
     )
+    parser.add_argument(
+        "--drinkcontrol", dest="drinkcontrol_csv", metavar="PATH",
+        help="Path to DrinkControl CSV export. Parses alcohol consumption (7-day units, "
+             "28-day avg, recovery flag) → updates demo_inputs/outcome_signals.json "
+             "before running the pipeline. "
+             "Example: --drinkcontrol ~/Library/Mobile\\ Documents/com~apple~CloudDocs/drinkcontrol.csv"
+    )
     args = parser.parse_args()
 
     if not args.demo:
@@ -597,6 +604,20 @@ def main():
             garmin_dir=garmin_dir,
             output_path=demo_dir / "outcome_signals.json",
             days=args.wellness_days,
+        )
+        print()
+
+    # --drinkcontrol: parse DrinkControl CSV → update outcome_signals.json -----------
+    if args.drinkcontrol_csv:
+        dc_path = Path(args.drinkcontrol_csv).expanduser()
+        if not dc_path.is_absolute():
+            dc_path = (ROOT / dc_path).expanduser().resolve()
+        if not dc_path.exists():
+            raise SystemExit(f"[--drinkcontrol] File not found: {dc_path}")
+        print(f"\n[--drinkcontrol] Parsing DrinkControl export...")
+        drinkcontrol_import.run(
+            csv_path=dc_path,
+            output_path=demo_dir / "outcome_signals.json",
         )
         print()
 

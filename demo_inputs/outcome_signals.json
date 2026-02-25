@@ -1,6 +1,6 @@
 {
   "week_start": "2026-02-23",
-  "generated_at": "2026-02-25T02:17:40Z",
+  "generated_at": "2026-02-25T02:51:22Z",
   "garmin_summary": {
     "avg_sleep_hr": 8.2,
     "avg_rhr": 57,
@@ -15,5 +15,16 @@
     "protein_g": 150,
     "carbs_g": 280,
     "fat_g": 70
+  },
+  "alcohol_summary": {
+    "units_7d": 4.49,
+    "units_28d_avg_wk": 3.48,
+    "kcal_7d": 439,
+    "drink_days_7d": 1,
+    "heaviest_day_7d": 4.49,
+    "last_drink_date": "2026-02-21",
+    "days_since_drink": 3,
+    "flag": "light",
+    "recovery_note": "Last drink was 3 days ago. Light week (4.5 units). Minor REM suppression possible; ensure adequate hydration and B-vitamins."
   }
 }

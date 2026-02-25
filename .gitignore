@@ -12,3 +12,7 @@ demo_inputs/raw/garmin_activities.csv
 Garmin*/
 *.lha
 *_LhaBackup_*.zip
+
+# DrinkControl export — personal health data, never commit
+drinkcontrol*.csv
+DrinkControl*.csv
