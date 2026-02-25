@@ -9,12 +9,22 @@ How to export from Garmin Connect:
   3. Select "Export to CSV"
   4. Save as demo_inputs/raw/garmin_activities.csv
 
-Expected CSV columns (Garmin Connect standard export):
-  Activity Type, Date, Favorite, Title, Distance, Calories, Time,
-  Avg HR, Max HR, Aerobic TE, Avg Run Cadence, Max Run Cadence,
-  Avg Pace, Best Pace, Total Ascent, Total Descent, Avg Stride Length,
-  Avg Vertical Ratio, Avg Vertical Oscillation, Training Stress Score,
-  Avg Power, Max Power, Steps, ...
+Columns used from the Garmin Connect Activities CSV export (46 columns total):
+  Activity Type, Date, Title, Distance, Calories, Avg HR, Aerobic TE
+
+  Other columns present but not used by this parser:
+  Favorite, Total Time, Max HR, Avg Bike Cadence, Max Bike Cadence,
+  Avg Speed, Max Speed, Total Ascent, Total Descent, Avg Stride Length,
+  Normalized Power® (NP®), Training Stress Score®, Max Avg Power (20 min),
+  Avg Power, Max Power, Total Strokes, Steps, Total Reps, Total Sets,
+  Body Battery Drain, Min Temp, Decompression, Best Lap Time,
+  Number of Laps, Max Temp, Avg Resp, Min Resp, Max Resp, Stress Change,
+  Stress Start, Stress End, Avg Stress, Max Stress, Moving Time,
+  Elapsed Time, Min Elevation, Max Elevation
+
+  Note: "Aerobic TE" is "--" (not a float) for non-endurance activities
+  like Cardio. The _parse_float() helper returns None for "--" and the
+  classifier falls through to activity-type-based logic (ALWAYS_TRAINING).
 
 Assumptions documented in docs/02_Data_Contracts.md:
   - Week starts Monday (ISO week convention)

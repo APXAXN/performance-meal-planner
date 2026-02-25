@@ -5,3 +5,5 @@
 .env
 outputs/demo/
 outputs/demo_alt/
+demo_inputs/parsed/
+demo_inputs/raw/garmin_activities.csv

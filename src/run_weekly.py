@@ -573,10 +573,15 @@ def main():
 
     schema_registry = build_registry()
 
+    # After --ingest, read from parsed/ dir; otherwise fall back to static demo files
+    parsed_dir = demo_dir / "parsed"
+    use_parsed = args.ingest and parsed_dir.exists()
+    input_dir = parsed_dir if use_parsed else demo_dir
+
     try:
-        user = load_json(demo_dir / "user_profile.json")
+        user = load_json(input_dir / "user_profile.json")
         context_file = "weekly_context_alt.json" if args.variant == "alt" else "weekly_context.json"
-        context = load_json(demo_dir / context_file)
+        context = load_json(input_dir / context_file)
         signals = load_json(demo_dir / "outcome_signals.json")
 
         validate_or_exit(
